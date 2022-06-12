@@ -25,22 +25,46 @@ No reasons. Main purpose here is to setup a reusable plug and play terraform dep
 
 ## Guides
 
------
+## config.json
+This is the most important file. Every configuration goes in this file.
 
-## [Create a service account](https://console.cloud.google.com/iam-admin/serviceaccounts?project={project_id)
-  1. Goto https://console.cloud.google.com/iam-admin/serviceaccounts?project={project_id} and create a new service account
-  2. Provide at least following permissions to the service account initially
+```json
+{
+   
+  "common": "Place for all common variables across the environments",
+  "production": {},
+  "staging": {}  
+}
+```
+
+-----
+### Create a project
+A pre-existing project is required. This project id needs to be copied in our config.json file.
+If we need multiple projects for each environment, then it can go to enivronment block in config.json file.
+Otherwise, we can add it to common.json
+
+### Add a billing account to the project
+
+
+### [Create a service account](https://console.cloud.google.com/iam-admin/serviceaccounts?project={project_id)
+```bash
+ENV={production|staging} init-gcp-project
+```
+This will create a service account, set it as owner, download keys and save it to `cicd/access.key.json`
+
+### Configure service account in project in gcp console manually. (If not done automatically by above command)
+1. Provide at least following permissions to the service account initially
       1. Storage Object Admin // Storage Admin
       2. Compute Api Engine
       3. Cloud Run Admin
       4. Container Registry Service Agent
       5. Service Account User (*I think this will be available by default*)
-  3. [Other options that we might need are](https://cloud.google.com/compute/docs/access/iam):
-      1. **Cloud Scheduler Admin** - If we need to run queue
-      2. **Compute Admin** - If we need to create/modify instances
-      3. **Cloud SQL Admin** - For DB access
-  4. [Allow user to impersonate the service account](https://cloud.google.com/iam/docs/impersonating-service-accounts#allow-impersonation)
-  5. Download the credentials.json to local.
+2. [Other options that we might need are](https://cloud.google.com/compute/docs/access/iam):
+    1. **Cloud Scheduler Admin** - If we need to run queue
+    2. **Compute Admin** - If we need to create/modify instances
+    3. **Cloud SQL Admin** - For DB access
+3. [Allow user to impersonate the service account](https://cloud.google.com/iam/docs/impersonating-service-accounts#allow-impersonation)
+4. Download the credentials.json to local.
      > **Note**: It is very important to add this file to `.gitignore`
 
 

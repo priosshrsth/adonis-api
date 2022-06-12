@@ -41,7 +41,7 @@ set-role-to-service-account:
         --role="roles/owner"
 
 download-access-key:
-	cd cicd/terraform && \
+	cd cicd && \
 		gcloud iam service-accounts keys create access.key.json --iam-account=$(SERVICE_ACCOUNT_ID)@$(PROJECT_ID).iam.gserviceaccount.com
 
 enable-base-services:
