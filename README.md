@@ -1,6 +1,11 @@
 ## INFO
 
 -----
+### Good Reads
+1. https://genekuo.medium.com/setting-up-a-ci-cd-pipeline-on-gcp-with-terraform-539e66797072
+2. https://cloud.google.com/storage/docs/creating-buckets#prereq-cli
+3. https://cloud.google.com/sdk/gcloud/reference/iam/roles
+4. https://cloud.google.com/compute/docs/access/iam#compute.instanceAdmin
 
 ### Why adonis JS??
 No reasons. Main purpose here is to setup a reusable plug and play terraform deployment codebase.
@@ -22,8 +27,8 @@ No reasons. Main purpose here is to setup a reusable plug and play terraform dep
 
 -----
 
-## Create a service account
-  1. Goto https://console.cloud.google.com/iam-admin/iam?project={project_id} and create a new service account
+## [Create a service account](https://console.cloud.google.com/iam-admin/serviceaccounts?project={project_id)
+  1. Goto https://console.cloud.google.com/iam-admin/serviceaccounts?project={project_id} and create a new service account
   2. Provide at least following permissions to the service account initially
       1. Storage Object Admin // Storage Admin
       2. Compute Api Engine
@@ -34,7 +39,8 @@ No reasons. Main purpose here is to setup a reusable plug and play terraform dep
       1. **Cloud Scheduler Admin** - If we need to run queue
       2. **Compute Admin** - If we need to create/modify instances
       3. **Cloud SQL Admin** - For DB access
-  4. Download the credentials.json to local.
+  4. [Allow user to impersonate the service account](https://cloud.google.com/iam/docs/impersonating-service-accounts#allow-impersonation)
+  5. Download the credentials.json to local.
      > **Note**: It is very important to add this file to `.gitignore`
 
 
