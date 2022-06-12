@@ -1,6 +1,18 @@
+provider "google" {
+  project = var.project_id
+  region = var.region
+  zone = var.zone
+}
+
+provider "google-beta" {
+  project = var.project_id
+  region = var.region
+  zone = var.zone
+}
+
 terraform {
   backend "gcs" {
     bucket = ""
-    prefix = "/state/api"
+    prefix = var.gcs_bucket_prefix
   }
 }

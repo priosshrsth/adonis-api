@@ -20,3 +20,8 @@ variable "app_image" {
   description = "Url from google container repository image"
   type = string
 }
+
+variable "gcs_bucket_prefix" {
+  description = "Path for storing state files in gcs bucket"
+  type = string
+}
