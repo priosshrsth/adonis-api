@@ -1,23 +1,33 @@
-variable "project_id" {
-  default = "playground-325915"
-  description = "The GCP project id"
-  type        = string
-}
-
-variable "region" {
-  default     = "us-central1"
-  description = "GCP region"
-  type        = string
-}
-
-variable "zone" {
-  default = "use-central1-c"
-  description = "GCP zone"
+variable "project_name" {
+  description = "Project name mainly used to start a project"
   type = string
 }
 
-variable "app_image" {
-  description = "Url from google container repository image"
+variable "project_id" {
+  description = "The GCP project id"
+  type        = string
+  nullable = false
+}
+
+variable "region" {
+  description = "GCP region"
+  type        = string
+  nullable = false
+}
+
+variable "zone" {
+  description = "GCP zone"
+  type = string
+  nullable = false
+}
+
+#variable "app_image" {
+#  description = "Url from google container repository image"
+#  type = string
+#}
+
+variable "gcs_state_bucket" {
+  description = "Path for storing state files in gcs bucket"
   type = string
 }
 

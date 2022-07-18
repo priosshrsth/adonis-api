@@ -16,3 +16,8 @@ terraform {
     prefix = var.gcs_bucket_prefix
   }
 }
+
+
+#output "show_locals" {
+#  value = var.gcs_state_bucket
+#}

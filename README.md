@@ -48,9 +48,11 @@ Otherwise, we can add it to common.json
 
 ### [Create a service account](https://console.cloud.google.com/iam-admin/serviceaccounts?project={project_id)
 ```bash
-ENV={production|staging} init-gcp-project
+ENV={production|staging} configure-gcp-project
 ```
 This will create a service account, set it as owner, download keys and save it to `cicd/access.key.json`
+If it throws error, then service account must already exist in the project. In which case, you can choose to 
+configure roles manually in gcp console or via makefile.
 
 ### Configure service account in project in gcp console manually. (If not done automatically by above command)
 1. Provide at least following permissions to the service account initially

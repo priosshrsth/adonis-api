@@ -1,10 +1,22 @@
-const config = require('./config.json')
+const commonConfig = require('./terraform/terraform.tfvars.json')
 
-const getVal = (env = '', key = '') => {
-  return readConfig(`${env}.${key}`) || readConfig(`common.${key}`)
+function getEnvConfig(env = '') {
+  if (!env) {
+    return {}
+  }
+  return require(`./terraform/environments/${env}.tfvars.json`)
 }
 
-const readConfig = (key = '', obj = config) => {
+const getVal = (env = '', key = '') => {
+  const envConfig = getEnvConfig(env)
+  const config = {
+    common: commonConfig,
+    [env]: envConfig,
+  }
+  return readConfig(`${env}.${key}`, config) || readConfig(`common.${key}`, config)
+}
+
+const readConfig = (key = '', obj) => {
   const currKey = key.split('.')[0]
   const val = obj[currKey]
   if (typeof val !== 'object') {
@@ -15,10 +27,10 @@ const readConfig = (key = '', obj = config) => {
 }
 
 const args = process.argv
-const envIndex = args.findIndex((x) => x.trim() === 'env=') + 1
-const keyIndex = args.findIndex((x) => x.trim() === 'key=') + 1
-const env = args[envIndex].replaceAll(' ', '')
-const key = args[keyIndex].replaceAll(' ', '')
+const envIndex = args.findIndex((x) => x.trim().startsWith('env='))
+const keyIndex = args.findIndex((x) => x.trim().startsWith('key='))
+const env = args[envIndex].replaceAll('env=', '').trim()
+const key = args[keyIndex].replaceAll('key=', '').trim()
 
 const value = getVal(env, key)
 console.log(value)
