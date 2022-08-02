@@ -3,10 +3,20 @@ variable "project_name" {
   type = string
 }
 
+variable "environment" {
+  description = "App Environment: staging | production"
+  type: string
+}
+
 variable "project_id" {
   description = "The GCP project id"
   type        = string
   nullable = false
+}
+
+variable "client_email" {
+  description = "GCP service account"
+  type = string
 }
 
 variable "region" {
@@ -21,11 +31,6 @@ variable "zone" {
   nullable = false
 }
 
-#variable "app_image" {
-#  description = "Url from google container repository image"
-#  type = string
-#}
-
 variable "gcs_state_bucket" {
   description = "Path for storing state files in gcs bucket"
   type = string
@@ -33,5 +38,24 @@ variable "gcs_state_bucket" {
 
 variable "gcs_bucket_prefix" {
   description = "Path for storing state files in gcs bucket"
+  type = string
+}
+
+variable "app_image" {
+  description = "App image url"
+  type = string
+}
+
+variable "app_commit_hash" {
+  type = string
+}
+
+variable "db_port" {
+  type = number
+  default = 5400
+}
+
+variable "db_password" {
+  description = "Database password"
   type = string
 }

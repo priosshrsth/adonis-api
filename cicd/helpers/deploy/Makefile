@@ -11,3 +11,11 @@ terraform-init:
 	cd cicd/terraform && \
 		terraform workspace select $(ENV) && \
 		terraform init
+
+terraform-apply:
+	cd ./cicd/terraform && \
+			terraform apply \
+			-var-file="../credentials/$(ENV).key.json"
+			-var-file="./terraform.secret.tfvars"
+			-var-file="./$(ENV).tfvars"
+			-var-file="./$(ENV).secret.tfvars"

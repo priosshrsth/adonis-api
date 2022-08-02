@@ -1,4 +1,3 @@
 {
-  "gcs_bucket_prefix": "/state/outside-staging",
   "gcs_state_bucket": "adonis-staging-tfstate"
 }

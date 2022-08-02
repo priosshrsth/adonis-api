@@ -1,13 +1,16 @@
-const commonConfig = require('./terraform/terraform.tfvars.json')
+const commonConfig = require('../gcp-config/common.json')
 
-function getEnvConfig(env = '') {
-  if (!env) {
-    return {}
-  }
-  return require(`./terraform/environments/${env}.tfvars.json`)
+const getEnvConfig = function getEnvConfig(env = '') {
+  return require(`../gcp-config/${env}.json`)
 }
 
 const getVal = (env = '', key = '') => {
+  if (!env) {
+    throw new Error('No ENV provided for .' + key)
+  }
+  if (!key) {
+    return ''
+  }
   const envConfig = getEnvConfig(env)
   const config = {
     common: commonConfig,
@@ -29,8 +32,10 @@ const readConfig = (key = '', obj) => {
 const args = process.argv
 const envIndex = args.findIndex((x) => x.trim().startsWith('env='))
 const keyIndex = args.findIndex((x) => x.trim().startsWith('key='))
-const env = args[envIndex].replaceAll('env=', '').trim()
-const key = args[keyIndex].replaceAll('key=', '').trim()
+const env = args[envIndex]?.replaceAll('env=', '')?.trim()
+const key = args[keyIndex]?.replaceAll('key=', '')?.trim()
 
 const value = getVal(env, key)
 console.log(value)
+
+module.exports = { getVal }
