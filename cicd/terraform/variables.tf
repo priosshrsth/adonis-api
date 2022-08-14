@@ -1,11 +1,13 @@
 variable "project_name" {
   description = "Project name mainly used to start a project"
   type = string
+  nullable = false
 }
 
 variable "environment" {
   description = "App Environment: staging | production"
-  type: string
+  type = string
+  nullable = false
 }
 
 variable "project_id" {
@@ -34,16 +36,19 @@ variable "zone" {
 variable "gcs_state_bucket" {
   description = "Path for storing state files in gcs bucket"
   type = string
+  nullable = false
 }
 
 variable "gcs_bucket_prefix" {
   description = "Path for storing state files in gcs bucket"
   type = string
+  nullable = false
 }
 
 variable "app_image" {
   description = "App image url"
   type = string
+  nullable = false
 }
 
 variable "app_commit_hash" {
@@ -58,4 +63,5 @@ variable "db_port" {
 variable "db_password" {
   description = "Database password"
   type = string
+  nullable = false
 }
