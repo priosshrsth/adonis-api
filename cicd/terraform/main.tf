@@ -121,6 +121,53 @@ resource "google_compute_address" "disposable-vm-static" {
   name = "ipv4-address"
 }
 
+resource "google_compute_instance" "disposable-vm" {
+  name = format("adonis-api-disposable-vm-%s", var.app_commit_hash)
+  provider = google-beta
+  machine_type = "e2-small"
+  hostname = format("vm.%s.outside.com", var.environment)
+  depends_on = [google_sql_database.db]
+
+  scheduling {
+    provisioning_model = "SPOT"
+    preemptible = true
+    automatic_restart = false
+  }
+
+  boot_disk {
+    initialize_params {
+      image = module.gce-container.source_image
+    }
+  }
+
+  network_interface {
+    network = "default"
+
+    access_config {
+      nat_ip = google_compute_address.disposable-vm-static.address
+    }
+  }
+
+  metadata = {
+    gce-container-declaration = module.gce-container.metadata_value
+  }
+
+  service_account {
+    scopes = [
+      "cloud-platform",
+    ]
+  }
+}
+
+resource "null_resource" "disposable-vm-update-container" {
+  triggers = {
+    app_image = var.app_image
+  }
+
+  depends_on = [google_compute_instance.disposable-vm]
+}
+
+
 # postgres database
 
 resource "google_sql_database_instance" "postgres" {
@@ -194,15 +241,16 @@ resource "google_storage_bucket_access_control" "assets_access_roles" {
 }
 
 # Cloud Scheduler
-
-resource "google_cloud_scheduler_job" "activities_place_details_sync" {
-  name = "adonis-api-activities_place_details_sync"
+resource "google_cloud_scheduler_job" "test_scheduler" {
+  name = "adonis-api-sync"
   description = "Pings activities/place-details-sync at minute 0"
-  schedule = "0 * * * *"
+  schedule = "60 * * * *"
   region = "us-central1"
   time_zone = "GMT"
   http_target {
     http_method = "POST"
-    uri = "${google_cloud_run_service.app.status[0].url}/activities/place-details-sync"
+    uri = "${google_cloud_run_service.app.status[0].url}/healthcheck"
   }
 }
+
+# TODO:-

@@ -9,13 +9,18 @@ create-tf-workspace:
 
 terraform-init:
 	cd cicd/terraform && \
-		terraform workspace select $(ENV) && \
-		terraform init
+    GOOGLE_APPLICATION_CREDENTIALS=$(PROJECT_DIR)/cicd/credentials/$(ENV).key.json \
+		terraform init -backend-config bucket="$(STATE_BUCKET)"
 
 terraform-apply:
 	cd ./cicd/terraform && \
-			terraform apply \
-			-var-file="../credentials/$(ENV).key.json"
-			-var-file="./terraform.secret.tfvars"
-			-var-file="./$(ENV).tfvars"
-			-var-file="./$(ENV).secret.tfvars"
+    GOOGLE_APPLICATION_CREDENTIALS=$(PROJECT_DIR)/cicd/credentials/$(ENV).key.json \
+		terraform apply \
+		-var-file="../../gcp-config/common.json" \
+		-var-file="../../gcp-config/$(ENV).json" \
+		-var-file="../../terraform/terraform.tfvars" \
+		-var-file="../../terraform/terraform.secret.tfvars" \
+		-var-file="../../terraform/$(ENV).tfvars" \
+		-var-file="../../terraform/$(ENV).secret.tfvars" \
+		app_commit_hash=$(COMMIT_HASH)
+		-auto-approve

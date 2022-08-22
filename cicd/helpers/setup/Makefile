@@ -3,6 +3,8 @@ check-variables:
 	@echo ProjectId : $(PROJECT_ID)
 	@echo ProjectName : $(PROJECT_NAME)
 	@echo StateBucket : $(STATE_BUCKET)
+	@echo CommitHash : $(COMMIT_HASH)
+	@echo ProjectDir : $(PROJECT_DIR)
 
 # Create a bucket. If it already exists, then throws an error
 create-tf-backend-bucket:
