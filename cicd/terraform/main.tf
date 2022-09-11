@@ -64,6 +64,8 @@ resource "google_cloud_run_service" "app" {
           }
         }
       }
+
+      service_account_name = var.client_email
     }
 
     metadata {
@@ -153,6 +155,7 @@ resource "google_compute_instance" "disposable-vm" {
   }
 
   service_account {
+    email = var.client_email
     scopes = [
       "cloud-platform",
     ]

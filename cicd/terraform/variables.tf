@@ -4,6 +4,12 @@ variable "project_name" {
   nullable = false
 }
 
+variable "image_port" {
+  description = "The port the image exposes for HTTP requests"
+  type        = number
+  default     = 3333
+}
+
 variable "environment" {
   description = "App Environment: staging | production"
   type = string

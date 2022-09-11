@@ -21,4 +21,4 @@ COPY . .
 
 EXPOSE 3333
 
-CMD ["pnpm", "start"]
+CMD ["pnpm", "build", "&", "pnpm", "start"]
