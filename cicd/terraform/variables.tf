@@ -61,6 +61,9 @@ variable "app_commit_hash" {
   type = string
 }
 
+
+# App configs
+
 variable "db_port" {
   type = number
   default = 5400
@@ -70,4 +73,32 @@ variable "db_password" {
   description = "Database password"
   type = string
   nullable = false
+}
+
+## Variables for env files
+# remove this if not required
+variable "app_name" {
+  description = "Name of the app"
+  default = "Adonis API"
+}
+
+variable "app_port" {
+  description = "port where app runs"
+#  Set default based on your app/tech used. For adonis it is 3333
+  default = "3333"
+}
+
+variable "app_host" {
+  description = "host where app runs eg: 0.0.0.0"
+  default = "0.0.0.0"
+}
+
+# remove this if not required
+variable "app_key" {
+  description = "Unique key usually required for apis"
+}
+
+variable "drive_disk" {
+  description = "required for adonis for asset storage"
+  default = "local"
 }

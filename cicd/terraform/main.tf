@@ -18,8 +18,11 @@ terraform {
 
 locals {
   environment_variables = {
+    APP_KEY              = var.app_key
+    APP_NAME             = var.app_name
+    DRIVE_DISK           = var.drive_disk
     APP_ENV              = var.environment
-    HOST                 = 0.0.0.0
+    HOST                 = var.app_host
     CLOUD_SQL_CONNECTION = "/cloudsql/${var.project_id}:${var.region}:${google_sql_database_instance.postgres.name}"
     DATABASE_HOST        = google_sql_database_instance.postgres.public_ip_address
     DATABASE_NAME        = google_sql_database.db.name
