@@ -125,7 +125,7 @@ resource "google_compute_instance" "disposable-vm" {
   name = format("adonis-api-disposable-vm-%s", var.app_commit_hash)
   provider = google-beta
   machine_type = "e2-small"
-  hostname = format("vm.%s.outside.com", var.environment)
+#  hostname = format("vm.%s.outside.com", var.environment)
   depends_on = [google_sql_database.db]
 
   scheduling {
