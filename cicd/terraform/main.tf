@@ -18,6 +18,7 @@ terraform {
 
 locals {
   environment_variables = {
+    NODE_ENV             = var.environment
     APP_KEY              = var.app_key
     APP_NAME             = var.app_name
     DRIVE_DISK           = var.drive_disk
@@ -131,7 +132,7 @@ resource "google_compute_instance" "disposable-vm" {
   name = format("adonis-api-disposable-vm-%s", var.app_commit_hash)
   provider = google-beta
   machine_type = "e2-small"
-#  hostname = format("vm.%s.outside.com", var.environment)
+  hostname = format("vm.%s.outside.com", var.environment)
   depends_on = [google_sql_database.db]
 
   scheduling {
@@ -251,9 +252,9 @@ resource "google_storage_bucket_access_control" "assets_access_roles" {
 resource "google_cloud_scheduler_job" "test_scheduler" {
   name = "adonis-api-sync"
   description = "Pings activities/place-details-sync at minute 0"
-  schedule = "60 * * * *"
+  schedule         = "*/8 * * * *"
   region = "us-central1"
-  time_zone = "GMT"
+  time_zone = "America/New_York"
   http_target {
     http_method = "POST"
     uri = "${google_cloud_run_service.app.status[0].url}/healthcheck"
