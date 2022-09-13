@@ -135,6 +135,8 @@ resource "google_compute_instance" "disposable-vm" {
   hostname = format("vm.%s.outside.com", var.environment)
   depends_on = [google_sql_database.db]
 
+  tags = ["http-server","https-server"]
+
   scheduling {
     provisioning_model = "SPOT"
     preemptible = true
