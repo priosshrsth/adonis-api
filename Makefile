@@ -98,6 +98,6 @@ endif
 	curl \
       -X POST  \
       -H 'Accept: application/vnd.github.everest-preview+json' \
-      -H "Authorization: token $GITHUB_DEPLOY_TOKEN" \
+      -H "Authorization: token ${GITHUB_DEPLOY_TOKEN}" \
       https://api.github.com/repos/Folio-Travel/api/dispatches \
       --data '{"event_type": "deploy-service", "client_payload": {"environment": "'"${ENV}"'", "ref": "'"${BRANCH}"'"}}' \
