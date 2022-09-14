@@ -22,9 +22,13 @@ RUN node ace build --production
 
 
 FROM base AS production
+RUN true
 COPY --chown=node:node --from=build /home/node/app/build .
 
+RUN true
 COPY --chown=node:node ./package.json .
+
+RUN true
 COPY --chown=node:node ./pnpm-lock.yaml .
 
 RUN pnpm install --prefer-offline
