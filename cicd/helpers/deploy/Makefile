@@ -20,7 +20,7 @@ authenticate-docker:
 	gcloud auth configure-docker gcr.io --quiet
 
 build-docker-image:
-	docker build -t "${APP_IMAGE}" -f Dockerfile "${PROJECT_DIR}"
+	docker build -t "${APP_IMAGE}" --target production -f Dockerfile "${PROJECT_DIR}"
 
 push-docker-image:
 	docker push "${APP_IMAGE}"
