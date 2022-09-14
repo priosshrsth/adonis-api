@@ -18,7 +18,7 @@ jobs:
           ref: ${{ github.event.client_payload.ref }}
 
       - name: Sync Image To GCR
-        run: ENV=production PASSPHRASE=${{ secrets.GPG_PASSPHRASE }} make push-new-image"
+        run: ENV=production PASSPHRASE=${{ secrets.GPG_PASSPHRASE }} make push-new-image
 
       - name: Apply Terraform Changes
         run: ENV=production PASSPHRASE=${{ secrets.GPG_PASSPHRASE }} make terraform-apply
