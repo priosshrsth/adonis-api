@@ -17,6 +17,7 @@ terraform-init:
 authenticate-docker:
 	gcloud auth activate-service-account "${SERVICE_ACCOUNT_EMAIL}" \
 		--key-file="${CICD_DIR}credentials/$(ENV).key.json"
+	gcloud auth configure-docker gcr.io --quiet
 
 build-docker-image:
 	docker build -t "${APP_IMAGE}" -f Dockerfile "${PROJECT_DIR}"

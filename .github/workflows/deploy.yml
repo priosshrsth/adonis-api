@@ -20,3 +20,5 @@ jobs:
 
       - name: Apply Terraform Changes
         run: ENV=${{ github.event.client_payload.environment }} PASSPHRASE=${{ secrets.GPG_PASSPHRASE }} make terraform-apply
+
+
