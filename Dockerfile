@@ -27,6 +27,6 @@ COPY --chown=node:node --from=build /home/node/app/build .
 COPY --chown=node:node ./package.json .
 COPY --chown=node:node ./pnpm-lock.yaml .
 
-RUN pnpm install --prod --prefer-offline
+RUN pnpm install --prefer-offline
 EXPOSE $PORT
 CMD [ "dumb-init", "node", "server.js" ]
