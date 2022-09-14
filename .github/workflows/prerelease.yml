@@ -23,5 +23,8 @@ jobs:
       - name: Sync Image To GCR
         run: ENV=staging make push-new-image
 
+      - name: Init Terraform Changes
+        run: ENV=staging make terraform-init
+
       - name: Apply Terraform Changes
         run: ENV=staging make terraform-apply

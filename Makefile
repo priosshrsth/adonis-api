@@ -74,6 +74,10 @@ encrypt-service-account:
 decrypt-service-account:
 	cd cicd/credentials && gpg --quiet --batch --yes --decrypt --passphrase ${PASSPHRASE} --cipher-algo AES256 --output "${ENV}.key.json" "${ENV}.key.json.gpg"
 
+encrypt-data:
+	$(MAKE) encrypt-environment-secrets
+	$(MAKE) encrypt-service-account
+
 decrypt-data:
 	$(MAKE) decrypt-environment-secrets
 	$(MAKE) decrypt-service-account
