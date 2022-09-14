@@ -1,0 +1,24 @@
+name: prerelease-deploy
+
+on:
+  release:
+    types:
+      - prereleased
+    branches: '*'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.client_payload.ref }}
+
+      - name: Sync Image To GCR
+        run: ENV=staging PASSPHRASE=${{ secrets.GPG_PASSPHRASE }} make push-new-image"
+
+      - name: Apply Terraform Changes
+        run: ENV=staging PASSPHRASE=${{ secrets.GPG_PASSPHRASE }} make terraform-apply
