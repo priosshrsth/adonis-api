@@ -2,11 +2,18 @@ version: "3.8"
 
 services:
   api:
+    container_name: adonis_app
+    restart: always
     build:
       context: ./
       dockerfile: Dockerfile
-      target: base
+      target: dependencies
+    env_file:
+      - .env
     ports:
       - ${PORT}:${PORT}
+      - "9229:9229"
+    volumes:
+      - ./:/home/node/app
     user: ${USER_ID}:${GROUP_ID}
-    command: bash -c 'pnpm dev'
+    command: bash -c 'pnpm install && dumb-init node ace serve --watch --node-args="--inspect=0.0.0.0"'

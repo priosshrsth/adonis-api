@@ -1,24 +1,32 @@
-FROM node:16-slim as base
+ARG NODE_IMAGE=node:16.13.1-alpine
+ARG PORT=3333
+
+FROM $NODE_IMAGE AS base
+RUN apk --no-cache add dumb-init
+RUN npm i -g pnpm
+RUN mkdir -p /home/node/app && chown node:node /home/node/app
 
 USER node
+WORKDIR /home/node/app
+RUN mkdir tmp
 
-#RUN npm --location=global config set user $USER
-RUN mkdir /home/node/.npm-global
-ENV PATH=/home/node/.npm-global/bin:$PATH
-ENV NPM_CONFIG_PREFIX=/home/node/.npm-global
-
-RUN npm install npm@latest --location=global
-
-# install pnpm
-RUN npm i --location=global pnpm
-WORKDIR /home/node
-COPY package.json  pnpm-lock.yaml ./
+FROM base AS dependencies
+COPY --chown=node:node ./package.json .
+COPY --chown=node:node ./pnpm-lock.yaml ./
+COPY --chown=node:node . .
 
 
+FROM dependencies AS build
 RUN pnpm install
+RUN node ace build --production
 
-COPY . .
 
-EXPOSE 3333
+FROM base AS production
+COPY --chown=node:node --from=build /home/node/app/build .
 
-CMD ["pnpm", "start"]
+COPY --chown=node:node ./package.json .
+COPY --chown=node:node ./pnpm-lock.yaml .
+
+RUN pnpm install --prod --prefer-offline
+EXPOSE $PORT
+CMD [ "dumb-init", "node", "server.js" ]

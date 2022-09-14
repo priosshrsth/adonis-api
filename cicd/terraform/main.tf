@@ -18,7 +18,12 @@ terraform {
 
 locals {
   environment_variables = {
+    NODE_ENV             = var.environment
+    APP_KEY              = var.app_key
+    APP_NAME             = var.app_name
+    DRIVE_DISK           = var.drive_disk
     APP_ENV              = var.environment
+    HOST                 = var.app_host
     CLOUD_SQL_CONNECTION = "/cloudsql/${var.project_id}:${var.region}:${google_sql_database_instance.postgres.name}"
     DATABASE_HOST        = google_sql_database_instance.postgres.public_ip_address
     DATABASE_NAME        = google_sql_database.db.name
@@ -64,6 +69,8 @@ resource "google_cloud_run_service" "app" {
           }
         }
       }
+
+      service_account_name = var.client_email
     }
 
     metadata {
@@ -128,6 +135,8 @@ resource "google_compute_instance" "disposable-vm" {
   hostname = format("vm.%s.outside.com", var.environment)
   depends_on = [google_sql_database.db]
 
+  tags = ["http-server","https-server"]
+
   scheduling {
     provisioning_model = "SPOT"
     preemptible = true
@@ -153,6 +162,7 @@ resource "google_compute_instance" "disposable-vm" {
   }
 
   service_account {
+    email = var.client_email
     scopes = [
       "cloud-platform",
     ]
@@ -244,9 +254,9 @@ resource "google_storage_bucket_access_control" "assets_access_roles" {
 resource "google_cloud_scheduler_job" "test_scheduler" {
   name = "adonis-api-sync"
   description = "Pings activities/place-details-sync at minute 0"
-  schedule = "60 * * * *"
+  schedule         = "*/8 * * * *"
   region = "us-central1"
-  time_zone = "GMT"
+  time_zone = "America/New_York"
   http_target {
     http_method = "POST"
     uri = "${google_cloud_run_service.app.status[0].url}/healthcheck"

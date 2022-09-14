@@ -22,6 +22,8 @@ PROJECT_NAME := $(strip $(call GetValueFromJson, project_name))
 SERVICE_ACCOUNT_ID := $(PROJECT_NAME)
 STATE_BUCKET := $(strip $(call GetValueFromJson, gcs_state_bucket))
 COMMIT_HASH := $(shell git rev-parse --short HEAD)
+APP_IMAGE := gcr.io/$(PROJECT_ID)/$(PROJECT_NAME):$(COMMIT_HASH)
+SERVICE_ACCOUNT_EMAIL :=$(SERVICE_ACCOUNT_ID)@$(PROJECT_ID).iam.gserviceaccount.com
 PROJECT_DIR := $(shell pwd)
 # ------------
 
@@ -34,6 +36,9 @@ check-variables:
 configure-gcp-project:
 	$(MAKE) -f cicd/helpers/setup/Makefile configure-gcp-project
 
+set-role-to-service-account:
+	$(MAKE) -f cicd/helpers/setup/Makefile set-role-to-service-account
+
 configure-gcp-project:
 	$(MAKE) -f cicd/helpers/setup/Makefile configure-gcp-project
 
@@ -45,6 +50,15 @@ terraform-init:
 
 terraform-apply:
 	$(MAKE) -f cicd/helpers/deploy/Makefile terraform-apply
+
+build-docker-image:
+	$(MAKE) -f cicd/helpers/deploy/Makefile build-docker-image
+
+push-new-image:
+	$(MAKE) -f cicd/helpers/deploy/Makefile build-docker-image
+	$(MAKE) -f cicd/helpers/deploy/Makefile authenticate-docker
+	$(MAKE) -f cicd/helpers/deploy/Makefile push-docker-image
+
 
 encrypt-environment-secrets:
 	cd cicd/terraform && gpg --symmetric --batch --yes --passphrase ${PASSPHRASE} --cipher-algo AES256 ${ENV}.secret.tfvars && \
@@ -63,7 +77,6 @@ decrypt-service-account:
 decrypt-data:
 	$(MAKE) decrypt-environment-secrets
 	$(MAKE) decrypt-service-account
-
 
 # TODO:- need to change the value from folio DB
 proxy_staging_cloud_sql:
