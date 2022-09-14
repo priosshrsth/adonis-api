@@ -17,8 +17,11 @@ jobs:
         with:
           ref: ${{ github.event.client_payload.ref }}
 
+      - name: Decrypt Data
+        run: ENV=staging PASSPHRASE=${{ secrets.GPG_PASSPHRASE }} make decrypt-data
+
       - name: Sync Image To GCR
-        run: ENV=staging PASSPHRASE=${{ secrets.GPG_PASSPHRASE }} make push-new-image
+        run: ENV=staging make push-new-image
 
       - name: Apply Terraform Changes
-        run: ENV=staging PASSPHRASE=${{ secrets.GPG_PASSPHRASE }} make terraform-apply
+        run: ENV=staging make terraform-apply

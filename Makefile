@@ -65,14 +65,14 @@ encrypt-environment-secrets:
 		gpg --symmetric --batch --yes --passphrase ${PASSPHRASE} --cipher-algo AES256 terraform.secret.tfvars
 
 decrypt-environment-secrets:
-	cd cicd/terraform && gpg --quiet --batch --yes --decrypt --passphrase="${GPG_PASSPHRASE}" --output "${ENV}.secret.tfvars" "${ENV}.secret.tfvars.gpg" \
-		gpg --quiet --batch --yes --decrypt --passphrase="${GPG_PASSPHRASE}" --output "terraform.secret.tfvars" "terraform.secret.tfvars.gpg" \
+	cd cicd/terraform && gpg --quiet --batch --yes --decrypt --passphrase ${PASSPHRASE} --cipher-algo AES256 --output "${ENV}.secret.tfvars" "${ENV}.secret.tfvars.gpg" && \
+		gpg --quiet --batch --yes --decrypt --passphrase ${PASSPHRASE} --cipher-algo AES256 --output "terraform.secret.tfvars" "terraform.secret.tfvars.gpg" \
 
 encrypt-service-account:
 	cd cicd/credentials && gpg --symmetric --batch --yes --passphrase ${PASSPHRASE} --cipher-algo AES256 ${ENV}.key.json
 
 decrypt-service-account:
-	cd cicd/credentials && gpg --quiet --batch --yes --decrypt --passphrase="${GPG_PASSPHRASE}" --output "${ENV}.key.json" "${ENV}.key.json.gpg"
+	cd cicd/credentials && gpg --quiet --batch --yes --decrypt --passphrase ${PASSPHRASE} --cipher-algo AES256 --output "${ENV}.key.json" "${ENV}.key.json.gpg"
 
 decrypt-data:
 	$(MAKE) decrypt-environment-secrets
