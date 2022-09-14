@@ -55,8 +55,8 @@ build-docker-image:
 	$(MAKE) -f cicd/helpers/deploy/Makefile build-docker-image
 
 push-new-image:
-	$(MAKE) -f cicd/helpers/deploy/Makefile build-docker-image
 	$(MAKE) -f cicd/helpers/deploy/Makefile authenticate-docker
+	$(MAKE) -f cicd/helpers/deploy/Makefile build-docker-image
 	$(MAKE) -f cicd/helpers/deploy/Makefile push-docker-image
 
 
