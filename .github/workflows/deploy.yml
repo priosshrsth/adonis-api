@@ -21,6 +21,9 @@ jobs:
       - name: Sync Image To GCR
         run: ENV=${{ github.event.client_payload.environment }} make push-new-image
 
+      - name: Init Terrafor
+        run: ENV=${{ github.event.client_payload.environment }} make terraform-init
+
       - name: Apply Terraform Changes
         run: ENV=${{ github.event.client_payload.environment }} make terraform-apply
 

@@ -21,5 +21,5 @@
 import Route from '@ioc:Adonis/Core/Route'
 
 Route.get('/', async () => {
-  return { msg: 'Welcome to Outside api using adonis js.' }
+  return { msg: 'Welcome to Outside api using adonis js. Deployed via github.' }
 })
